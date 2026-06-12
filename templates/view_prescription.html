@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}Prescription #{{ prescription.id }} - Prescription Scanner{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Prescription #{{ prescription.id }}</h1>
+            <p class="page-subtitle">{{ prescription.scan_date[:16] if prescription.scan_date else '' }}</p>
+        </div>
+        <div class="d-flex gap-2">
+            {% if prescription.pdf_path %}
+            <a href="{{ url_for('download_pdf', rx_id=prescription.id) }}" class="btn btn-primary-app">
+                <i class="bi bi-file-earmark-pdf me-2"></i>Download PDF
+            </a>
+            {% endif %}
+            <a href="{{ url_for('history') }}" class="btn btn-outline-app">
+                <i class="bi bi-arrow-left me-2"></i>Back to History
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <!-- Patient Info -->
+            <div class="section-card mb-4">
+                <div class="section-card-header"><h5><i class="bi bi-person-badge me-2"></i>Patient Information</h5></div>
+                <div class="section-card-body">
+                    <div class="detail-list">
+                        <div class="detail-row"><span class="dr-label">Patient Name</span><span class="dr-value">{{ prescription.patient_name or 'Not identified' }}</span></div>
+                        <div class="detail-row"><span class="dr-label">Age</span><span class="dr-value">{{ prescription.patient_age or 'Not identified' }}</span></div>
+                        <div class="detail-row"><span class="dr-label">Doctor</span><span class="dr-value">{{ prescription.doctor_name or 'Not identified' }}</span></div>
+                        <div class="detail-row"><span class="dr-label">Scan Date</span><span class="dr-value">{{ prescription.scan_date[:16] if prescription.scan_date else '-' }}</span></div>
+                        <div class="detail-row"><span class="dr-label">File</span><span class="dr-value small">{{ prescription.original_filename or '-' }}</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accuracy -->
+            <div class="section-card">
+                <div class="section-card-header"><h5><i class="bi bi-bar-chart-fill me-2"></i>Accuracy Metrics</h5></div>
+                <div class="section-card-body">
+                    {% set acc = prescription.accuracy_metrics %}
+                    <div class="metric-list">
+                        {% for label, key in [('Overall Accuracy','overall_accuracy'),('Character Accuracy','character_accuracy'),('Word Accuracy','word_accuracy'),('Medication Accuracy','medication_accuracy')] %}
+                        <div class="metric-list-item">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="small text-muted">{{ label }}</span>
+                                <span class="small fw-semibold">{{ acc.get(key, 0) }}%</span>
+                            </div>
+                            <div class="metric-bar">
+                                <div class="metric-bar-fill" style="width:{{ acc.get(key, 0) }}%; background: {{ '#2ecc71' if acc.get(key,0) > 70 else '#f39c12' if acc.get(key,0) > 40 else '#e74c3c' }};"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div class="detail-row mt-2"><span class="dr-label">OCR Confidence</span><span class="dr-value">{{ prescription.ocr_confidence or 0 }}%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <!-- Medications -->
+            <div class="section-card mb-4">
+                <div class="section-card-header">
+                    <h5><i class="bi bi-capsule-pill me-2"></i>Identified Medications</h5>
+                    <span class="meds-count-badge">{{ prescription.medications|length }} found</span>
+                </div>
+                <div class="section-card-body">
+                    {% if prescription.medications %}
+                        {% for med in prescription.medications %}
+                        <div class="med-card">
+                            <div class="med-card-header">
+                                <div class="med-number">{{ loop.index }}</div>
+                                <div class="med-main">
+                                    <div class="med-name">{{ med.name }}</div>
+                                    <span class="med-type-badge med-type-{{ med.type }}">{{ med.type or 'tablet' }}</span>
+                                    <span class="med-category">{{ (med.category or '').replace('_',' ') }}</span>
+                                </div>
+                                <div class="med-confidence">
+                                    <span class="conf-val">{{ med.match_confidence }}%</span>
+                                    <span class="conf-label">match</span>
+                                </div>
+                            </div>
+                            <div class="med-details">
+                                <div class="med-detail-item">
+                                    <i class="bi bi-capsule"></i>
+                                    <span class="med-detail-label">Dosage</span>
+                                    <span class="med-detail-value">{{ med.dosage }}</span>
+                                </div>
+                                <div class="med-detail-item">
+                                    <i class="bi bi-clock"></i>
+                                    <span class="med-detail-label">Frequency</span>
+                                    <span class="med-detail-value">{{ med.frequency }}</span>
+                                </div>
+                                <div class="med-detail-item">
+                                    <i class="bi bi-calendar3"></i>
+                                    <span class="med-detail-label">Duration</span>
+                                    <span class="med-detail-value">{{ med.duration }}</span>
+                                </div>
+                                <div class="med-detail-item">
+                                    <i class="bi bi-arrow-right-circle"></i>
+                                    <span class="med-detail-label">Route</span>
+                                    <span class="med-detail-value">{{ med.route }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <div class="empty-state small-empty">
+                        <i class="bi bi-search"></i>
+                        <p>No medications were identified in this prescription.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Raw Text -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <h5><i class="bi bi-file-text me-2"></i>Extracted Raw Text</h5>
+                </div>
+                <div class="section-card-body">
+                    <pre class="raw-text-pre">{{ prescription.raw_text or 'No text extracted.' }}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

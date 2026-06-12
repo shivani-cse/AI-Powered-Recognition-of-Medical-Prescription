@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block title %}Register - Prescription Scanner{% endblock %}
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-left">
+        <div class="auth-brand">
+            <div class="auth-logo-icon"><i class="bi bi-file-earmark-medical-fill"></i></div>
+            <h1 class="auth-app-name"><span>AI Powered Recognition of Doctors Medical Handwritten Prescription</span></h1>
+            
+        </div>
+        <div class="auth-features">
+            <div class="auth-feature-item">
+                <div class="auth-feature-icon"><i class="bi bi-shield-check-fill"></i></div>
+                <div>
+                    <h6>Secure & Private</h6>
+                    <p>All prescription data is encrypted and stored securely in your account</p>
+                </div>
+            </div>
+            <div class="auth-feature-item">
+                <div class="auth-feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                <div>
+                    <h6>Accuracy Tracking</h6>
+                    <p>Monitor OCR performance with character, word, and medication accuracy metrics</p>
+                </div>
+            </div>
+            <div class="auth-feature-item">
+                <div class="auth-feature-icon"><i class="bi bi-cloud-download-fill"></i></div>
+                <div>
+                    <h6>Export Options</h6>
+                    <p>Download your prescription history as PDF reports or CSV spreadsheets</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="auth-right">
+        <div class="auth-card">
+            <div class="auth-card-header">
+                <h2>Create Account</h2>
+                <p>Register to start scanning prescriptions</p>
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-sm mb-3">
+                    <i class="bi bi-exclamation-circle me-1"></i>{{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <form method="POST" action="{{ url_for('register') }}" novalidate>
+                <div class="form-group-auth">
+                    <label class="form-label-auth">Full Name</label>
+                    <div class="input-icon-wrapper">
+                        <i class="bi bi-person input-icon"></i>
+                        <input type="text" class="form-control auth-input" name="full_name"
+                               placeholder="Dr. / Mr. / Ms. Full Name" required>
+                    </div>
+                </div>
+                <div class="form-group-auth">
+                    <label class="form-label-auth">Email Address</label>
+                    <div class="input-icon-wrapper">
+                        <i class="bi bi-envelope input-icon"></i>
+                        <input type="email" class="form-control auth-input" name="email"
+                               placeholder="you@hospital.com" required>
+                    </div>
+                </div>
+                <div class="form-group-auth">
+                    <label class="form-label-auth">Role</label>
+                    <div class="input-icon-wrapper">
+                        <i class="bi bi-briefcase-medical input-icon"></i>
+                        <select class="form-control auth-input" name="role">
+                            <option value="user">Patient / General User</option>
+                            <option value="pharmacist">Pharmacist</option>
+                            <option value="doctor">Doctor</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group-auth">
+                    <label class="form-label-auth">Password</label>
+                    <div class="input-icon-wrapper">
+                        <i class="bi bi-lock input-icon"></i>
+                        <input type="password" class="form-control auth-input" id="password" name="password"
+                               placeholder="Minimum 8 characters" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                            <i class="bi bi-eye" id="eye-password"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength" id="strength-bar">
+                        <div class="strength-track"><div class="strength-fill" id="strength-fill"></div></div>
+                        <span class="strength-label" id="strength-label"></span>
+                    </div>
+                </div>
+                <div class="form-group-auth">
+                    <label class="form-label-auth">Confirm Password</label>
+                    <div class="input-icon-wrapper">
+                        <i class="bi bi-lock-fill input-icon"></i>
+                        <input type="password" class="form-control auth-input" id="confirm_password"
+                               name="confirm_password" placeholder="Re-enter your password" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('confirm_password')">
+                            <i class="bi bi-eye" id="eye-confirm_password"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="agree" required>
+                    <label class="form-check-label text-muted small" for="agree">
+                        I understand this is for reference purposes and I will consult a licensed professional
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-auth-primary w-100" id="register-btn">
+                    <i class="bi bi-person-plus me-2"></i>Create Account
+                </button>
+            </form>
+            <div class="auth-divider"><span>Already have an account?</span></div>
+            <a href="{{ url_for('login') }}" class="btn btn-auth-secondary w-100">
+                Sign In Instead
+            </a>
+        </div>
+    </div>
+</div>
+<script>
+document.getElementById('password').addEventListener('input', function() {
+    const pw = this.value;
+    const fill = document.getElementById('strength-fill');
+    const label = document.getElementById('strength-label');
+    let score = 0;
+    if (pw.length >= 8) score++;
+    if (/[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+    const colors = ['#e74c3c','#e67e22','#f1c40f','#2ecc71'];
+    const labels = ['Weak','Fair','Good','Strong'];
+    const widths = ['25%','50%','75%','100%'];
+    if (pw.length > 0) {
+        fill.style.width = widths[score-1] || '5%';
+        fill.style.background = colors[score-1] || '#e74c3c';
+        label.textContent = labels[score-1] || '';
+    } else {
+        fill.style.width = '0';
+        label.textContent = '';
+    }
+});
+</script>
+{% endblock %}

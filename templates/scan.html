@@ -1,0 +1,469 @@
+{% extends 'base.html' %}
+{% block title %}Scan Prescription - Prescription Scanner{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Scan Prescription</h1>
+            <p class="page-subtitle">Upload a handwritten prescription for AI-powered recognition</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- LEFT: Upload + Patient Entry -->
+        <div class="col-lg-5">
+
+            <!-- Upload Card -->
+            <div class="section-card mb-4">
+                <div class="section-card-header">
+                    <h5><i class="bi bi-cloud-upload me-2"></i>Upload Image</h5>
+                </div>
+                <div class="section-card-body">
+                    <div class="drop-zone" id="drop-zone">
+                        <div class="drop-zone-content" id="drop-zone-content">
+                            <div class="drop-icon"><i class="bi bi-file-earmark-image"></i></div>
+                            <h5>Drop image here</h5>
+                            <p>or click to browse files</p>
+                            <span class="drop-formats">PNG, JPG, JPEG, TIFF, BMP, WEBP</span>
+                        </div>
+                        <div class="drop-preview" id="drop-preview" style="display:none;">
+                            <img id="preview-img" src="" alt="Preview">
+                            <div class="preview-overlay">
+                                <button class="btn btn-sm btn-light" id="change-image">
+                                    <i class="bi bi-pencil"></i> Change
+                                </button>
+                            </div>
+                        </div>
+                        <input type="file" id="file-input" accept="image/*" style="display:none;">
+                    </div>
+
+                    <div id="quality-indicator" class="quality-card mt-3" style="display:none;">
+                        <div class="quality-header">Image Quality Analysis</div>
+                        <div class="quality-items" id="quality-items"></div>
+                    </div>
+
+                    <button class="btn btn-primary-app w-100 mt-3" id="scan-btn" disabled>
+                        <i class="bi bi-upc-scan me-2"></i>Analyze Prescription
+                    </button>
+
+                    <div id="processing-state" style="display:none;" class="text-center mt-3">
+                        <div class="processing-spinner">
+                            <div class="spinner-rings"><div></div><div></div><div></div></div>
+                        </div>
+                        <div class="processing-steps">
+                            <div class="proc-step active" id="step-preprocess"><i class="bi bi-image"></i> Preprocessing image...</div>
+                            <div class="proc-step" id="step-ocr"><i class="bi bi-cpu"></i> Running OCR engine...</div>
+                            <div class="proc-step" id="step-nlp"><i class="bi bi-search"></i> Extracting medications...</div>
+                            <div class="proc-step" id="step-report"><i class="bi bi-file-earmark-pdf"></i> Generating report...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manual Patient Entry Card -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <h5><i class="bi bi-person-badge me-2"></i>Patient Details</h5>
+                    <span class="badge-info-sm">Auto-filled or enter manually</span>
+                </div>
+                <div class="section-card-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label-sm">Patient Name</label>
+                            <div class="input-field-sm">
+                                <i class="bi bi-person input-icon-sm"></i>
+                                <input type="text" class="form-control form-control-sm patient-input" id="pt-name"
+                                       placeholder="Mr. / Mrs. Full Name">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label-sm">Age</label>
+                            <div class="input-field-sm">
+                                <i class="bi bi-calendar2 input-icon-sm"></i>
+                                <input type="text" class="form-control form-control-sm patient-input" id="pt-age"
+                                       placeholder="e.g. 41 years">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label-sm">Date</label>
+                            <div class="input-field-sm">
+                                <i class="bi bi-calendar-event input-icon-sm"></i>
+                                <input type="text" class="form-control form-control-sm patient-input" id="pt-date"
+                                       placeholder="DD/MM/YYYY">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label-sm">Doctor Name</label>
+                            <div class="input-field-sm">
+                                <i class="bi bi-person-badge input-icon-sm"></i>
+                                <input type="text" class="form-control form-control-sm patient-input" id="pt-doctor"
+                                       placeholder="Dr. Name">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label-sm">Notes (optional)</label>
+                            <textarea class="form-control form-control-sm" id="pt-notes" rows="2"
+                                      placeholder="Diagnosis, allergies, or other notes..."></textarea>
+                        </div>
+                    </div>
+                    <p class="patient-hint mt-2">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Fields auto-filled from prescription. Edit if incorrect.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Results Panel -->
+        <div class="col-lg-7">
+            <div id="results-panel" style="display:none;">
+
+                <!-- Accuracy -->
+                <div class="section-card mb-4">
+                    <div class="section-card-header">
+                        <h5><i class="bi bi-bar-chart-fill me-2"></i>OCR Accuracy Metrics</h5>
+                        <span class="badge-confidence" id="ocr-confidence-badge">—</span>
+                    </div>
+                    <div class="section-card-body">
+                        <div class="row g-3">
+                            <div class="col-6 col-md-3">
+                                <div class="metric-card">
+                                    <div class="metric-value" id="m-char">—</div>
+                                    <div class="metric-label">Character<br>Accuracy</div>
+                                    <div class="metric-bar"><div class="metric-bar-fill" id="mb-char"></div></div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="metric-card">
+                                    <div class="metric-value" id="m-word">—</div>
+                                    <div class="metric-label">Word<br>Accuracy</div>
+                                    <div class="metric-bar"><div class="metric-bar-fill" id="mb-word"></div></div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="metric-card">
+                                    <div class="metric-value" id="m-med">—</div>
+                                    <div class="metric-label">Medication<br>Accuracy</div>
+                                    <div class="metric-bar"><div class="metric-bar-fill" id="mb-med"></div></div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="metric-card metric-card-highlight">
+                                    <div class="metric-value" id="m-overall">—</div>
+                                    <div class="metric-label">Overall<br>Accuracy</div>
+                                    <div class="metric-bar"><div class="metric-bar-fill" id="mb-overall"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patient Info (read-only display) -->
+                <div class="section-card mb-4">
+                    <div class="section-card-header">
+                        <h5><i class="bi bi-person-badge me-2"></i>Patient Information</h5>
+                        <button class="btn btn-xs btn-view" onclick="scrollToPatientForm()">
+                            <i class="bi bi-pencil"></i> Edit
+                        </button>
+                    </div>
+                    <div class="section-card-body" id="patient-info-display"></div>
+                </div>
+
+                <!-- Medications -->
+                <div class="section-card mb-4">
+                    <div class="section-card-header">
+                        <h5><i class="bi bi-capsule-pill me-2"></i>Identified Medications</h5>
+                        <span class="meds-count-badge" id="meds-count">0 found</span>
+                    </div>
+                    <div class="section-card-body" id="medications-body"></div>
+                </div>
+
+                <!-- Raw Text -->
+                <div class="section-card mb-4">
+                    <div class="section-card-header">
+                        <h5><i class="bi bi-file-text me-2"></i>Extracted Raw Text</h5>
+                        <button class="btn btn-xs btn-link-app" onclick="toggleRawText()">Toggle</button>
+                    </div>
+                    <div class="section-card-body" id="raw-text-body" style="display:none;">
+                        <pre class="raw-text-pre" id="raw-text-content"></pre>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="#" class="btn btn-primary-app" id="download-pdf-btn" style="display:none;">
+                        <i class="bi bi-file-earmark-pdf me-2"></i>Download PDF
+                    </a>
+                    <a href="{{ url_for('history') }}" class="btn btn-outline-app">
+                        <i class="bi bi-clock-history me-2"></i>History
+                    </a>
+                    <button class="btn btn-outline-app" id="new-scan-btn">
+                        <i class="bi bi-plus-circle me-2"></i>New Scan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Placeholder -->
+            <div id="placeholder-panel" class="placeholder-scan-panel">
+                <div class="placeholder-icon"><i class="bi bi-file-earmark-medical"></i></div>
+                <h4>Results will appear here</h4>
+                <p>Upload a prescription image and click Analyze. The AI engine will identify medications, dosages, and frequencies.</p>
+                <div class="placeholder-features">
+                    <div class="pf-item"><i class="bi bi-check2-circle"></i> Handwriting recognition</div>
+                    <div class="pf-item"><i class="bi bi-check2-circle"></i> 277 medications + 1000 aliases</div>
+                    <div class="pf-item"><i class="bi bi-check2-circle"></i> Dosage &amp; frequency extraction</div>
+                    <div class="pf-item"><i class="bi bi-check2-circle"></i> PDF report generation</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.form-label-sm { font-size:.82rem; font-weight:600; color:var(--text-secondary); margin-bottom:4px; display:block; }
+.input-field-sm { position:relative; }
+.input-icon-sm { position:absolute; left:9px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:.85rem; pointer-events:none; }
+.patient-input { padding-left:28px; border:1.5px solid var(--border); border-radius:7px; font-size:.88rem; }
+.patient-input:focus { border-color:var(--primary-light); box-shadow:0 0 0 3px rgba(36,113,163,.1); outline:none; }
+.patient-hint { font-size:.78rem; color:var(--text-muted); margin:0; }
+.badge-info-sm { font-size:.75rem; color:var(--primary); background:var(--primary-lighter); padding:3px 8px; border-radius:20px; font-weight:500; }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const scanBtn = document.getElementById('scan-btn');
+let selectedFile = null;
+
+dropZone.addEventListener('click', e => {
+    if (!e.target.closest('#change-image')) fileInput.click();
+});
+document.getElementById('change-image').addEventListener('click', e => {
+    e.stopPropagation(); fileInput.click();
+});
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+    e.preventDefault(); dropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) handleFile(file);
+});
+fileInput.addEventListener('change', e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+
+function handleFile(file) {
+    selectedFile = file;
+    const reader = new FileReader();
+    reader.onload = e => {
+        document.getElementById('preview-img').src = e.target.result;
+        document.getElementById('drop-zone-content').style.display = 'none';
+        document.getElementById('drop-preview').style.display = 'flex';
+        scanBtn.disabled = false;
+    };
+    reader.readAsDataURL(file);
+}
+
+document.getElementById('new-scan-btn').addEventListener('click', () => {
+    selectedFile = null;
+    document.getElementById('drop-zone-content').style.display = 'flex';
+    document.getElementById('drop-preview').style.display = 'none';
+    document.getElementById('results-panel').style.display = 'none';
+    document.getElementById('placeholder-panel').style.display = 'flex';
+    document.getElementById('quality-indicator').style.display = 'none';
+    scanBtn.disabled = true;
+    fileInput.value = '';
+    ['pt-name','pt-age','pt-date','pt-doctor','pt-notes'].forEach(id => {
+        document.getElementById(id).value = '';
+    });
+});
+
+scanBtn.addEventListener('click', async () => {
+    if (!selectedFile) return;
+    document.getElementById('results-panel').style.display = 'none';
+    document.getElementById('placeholder-panel').style.display = 'none';
+    document.getElementById('processing-state').style.display = 'block';
+    scanBtn.disabled = true;
+
+    const steps = ['step-preprocess','step-ocr','step-nlp','step-report'];
+    let cur = 0;
+    const si = setInterval(() => {
+        if (cur > 0) document.getElementById(steps[cur-1]).classList.remove('active');
+        if (cur < steps.length) { document.getElementById(steps[cur]).classList.add('active'); cur++; }
+        else clearInterval(si);
+    }, 1400);
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    // Send manual patient overrides
+    formData.append('manual_name', document.getElementById('pt-name').value);
+    formData.append('manual_age', document.getElementById('pt-age').value);
+    formData.append('manual_date', document.getElementById('pt-date').value);
+    formData.append('manual_doctor', document.getElementById('pt-doctor').value);
+    formData.append('manual_notes', document.getElementById('pt-notes').value);
+
+    try {
+        const res = await fetch('/api/upload', { method: 'POST', body: formData });
+        clearInterval(si);
+        const data = await res.json();
+        document.getElementById('processing-state').style.display = 'none';
+        if (data.success) displayResults(data);
+        else showError(data.error || 'Processing failed.');
+    } catch(err) {
+        clearInterval(si);
+        document.getElementById('processing-state').style.display = 'none';
+        showError('Network error. Please try again.');
+    }
+    scanBtn.disabled = false;
+});
+
+function displayResults(data) {
+    // Accuracy
+    const a = data.accuracy_metrics || {};
+    setMetric('char', a.character_accuracy || 0);
+    setMetric('word', a.word_accuracy || 0);
+    setMetric('med', a.medication_accuracy || 0);
+    setMetric('overall', a.overall_accuracy || 0);
+    document.getElementById('ocr-confidence-badge').textContent = `OCR Confidence: ${data.ocr_confidence || 0}%`;
+
+    // Patient info — fill form inputs with OCR result then display
+    const pi = data.patient_info || {};
+    fillPatientForm(pi);
+    renderPatientDisplay(pi);
+
+    // Medications
+    const meds = data.medications || [];
+    document.getElementById('meds-count').textContent = `${meds.length} found`;
+    const medsBody = document.getElementById('medications-body');
+
+    if (meds.length > 0) {
+        medsBody.innerHTML = meds.map((med, i) => `
+            <div class="med-card">
+                <div class="med-card-header">
+                    <div class="med-number">${i+1}</div>
+                    <div class="med-main">
+                        <div class="med-name">${med.name}</div>
+                        <span class="med-type-badge med-type-${med.type}">${med.type || 'tablet'}</span>
+                        <span class="med-category">${(med.category||'').replace(/_/g,' ')}</span>
+                    </div>
+                    <div class="med-confidence">
+                        <span class="conf-val">${med.match_confidence}%</span>
+                        <span class="conf-label">match</span>
+                    </div>
+                </div>
+                <div class="med-details">
+                    <div class="med-detail-item">
+                        <i class="bi bi-capsule"></i>
+                        <span class="med-detail-label">Dosage</span>
+                        <span class="med-detail-value">${med.dosage}</span>
+                    </div>
+                    <div class="med-detail-item">
+                        <i class="bi bi-clock"></i>
+                        <span class="med-detail-label">Frequency</span>
+                        <span class="med-detail-value">${med.frequency}</span>
+                    </div>
+                    <div class="med-detail-item">
+                        <i class="bi bi-calendar3"></i>
+                        <span class="med-detail-label">Duration</span>
+                        <span class="med-detail-value">${med.duration}</span>
+                    </div>
+                    <div class="med-detail-item">
+                        <i class="bi bi-arrow-right-circle"></i>
+                        <span class="med-detail-label">Route</span>
+                        <span class="med-detail-value">${med.route}</span>
+                    </div>
+                </div>
+            </div>`).join('');
+    } else {
+        medsBody.innerHTML = `<div class="empty-state small-empty">
+            <i class="bi bi-search"></i>
+            <p>No medications identified. Please check the raw text below or enter details manually.</p>
+        </div>`;
+    }
+
+    document.getElementById('raw-text-content').textContent = data.raw_text || 'No text extracted.';
+
+    if (data.pdf_available && data.prescription_id) {
+        const btn = document.getElementById('download-pdf-btn');
+        btn.href = `/download/pdf/${data.prescription_id}`;
+        btn.style.display = 'inline-flex';
+    }
+
+    if (data.image_quality) {
+        const q = data.image_quality;
+        document.getElementById('quality-indicator').style.display = 'block';
+        document.getElementById('quality-items').innerHTML = `
+            <div class="quality-item ${q.is_blurry ? 'quality-warn':'quality-ok'}">
+                <i class="bi bi-${q.is_blurry?'exclamation-triangle':'check-circle'}"></i>
+                Sharpness: ${q.is_blurry ? 'Blurry — may reduce accuracy' : 'Good'}
+            </div>
+            <div class="quality-item ${(q.is_too_dark||q.is_too_bright)?'quality-warn':'quality-ok'}">
+                <i class="bi bi-${(q.is_too_dark||q.is_too_bright)?'exclamation-triangle':'check-circle'}"></i>
+                Brightness: ${q.is_too_dark?'Too dark':q.is_too_bright?'Too bright':'Good'}
+            </div>
+            <div class="quality-item quality-ok">
+                <i class="bi bi-check-circle"></i>
+                Overall: ${q.overall_quality}
+            </div>`;
+    }
+
+    document.getElementById('results-panel').style.display = 'block';
+    document.getElementById('results-panel').scrollIntoView({behavior:'smooth'});
+}
+
+function fillPatientForm(pi) {
+    const fields = {
+        'pt-name': pi.name || '',
+        'pt-age': pi.age || '',
+        'pt-date': pi.date || '',
+        'pt-doctor': pi.doctor || '',
+    };
+    Object.entries(fields).forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (el && !el.value) el.value = val;  // only fill if empty
+    });
+}
+
+function renderPatientDisplay(pi) {
+    const name = document.getElementById('pt-name').value || pi.name || 'Not identified';
+    const age  = document.getElementById('pt-age').value  || pi.age  || 'Not identified';
+    const date = document.getElementById('pt-date').value || pi.date || new Date().toLocaleDateString();
+    const doc  = document.getElementById('pt-doctor').value || pi.doctor || 'Not identified';
+    document.getElementById('patient-info-display').innerHTML = `
+        <div class="patient-grid">
+            <div class="patient-field"><span class="pf-label">Patient Name</span><span class="pf-value">${name}</span></div>
+            <div class="patient-field"><span class="pf-label">Age</span><span class="pf-value">${age}</span></div>
+            <div class="patient-field"><span class="pf-label">Date</span><span class="pf-value">${date}</span></div>
+            <div class="patient-field"><span class="pf-label">Doctor</span><span class="pf-value">${doc}</span></div>
+        </div>`;
+}
+
+function setMetric(id, value) {
+    document.getElementById(`m-${id}`).textContent = `${value}%`;
+    const fill = document.getElementById(`mb-${id}`);
+    fill.style.width = `${Math.min(value,100)}%`;
+    fill.style.background = value >= 70 ? '#2ecc71' : value >= 40 ? '#f39c12' : '#e74c3c';
+}
+
+function toggleRawText() {
+    const b = document.getElementById('raw-text-body');
+    b.style.display = b.style.display === 'none' ? 'block' : 'none';
+}
+
+function scrollToPatientForm() {
+    document.getElementById('pt-name').scrollIntoView({behavior:'smooth'});
+    document.getElementById('pt-name').focus();
+}
+
+function showError(msg) {
+    document.getElementById('placeholder-panel').style.display = 'flex';
+    document.getElementById('placeholder-panel').innerHTML = `
+        <div class="error-state text-center">
+            <i class="bi bi-exclamation-triangle-fill" style="font-size:2.5rem;color:var(--danger);"></i>
+            <h5 class="mt-3">Processing Error</h5>
+            <p>${msg}</p>
+            <button class="btn btn-outline-app mt-2" onclick="location.reload()">Try Again</button>
+        </div>`;
+}
+</script>
+{% endblock %}

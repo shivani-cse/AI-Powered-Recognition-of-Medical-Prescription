@@ -1,0 +1,70 @@
+scan_date,patient_name,patient_age,doctor,medicine_name,dosage,frequency,duration,route,category
+2026-04-10 12:38:07,Suresh Iyer,44,Ramesh Gupta,Metformin,500 mg,Morning and Night,As directed,Oral,antidiabetic
+2026-04-10 12:38:07,Suresh Iyer,44,Ramesh Gupta,Glimepiride,1 mg,In the morning only,As directed,Oral,antidiabetic
+2026-04-10 12:38:07,Suresh Iyer,44,Ramesh Gupta,Atorvastatin,10 mg,At bedtime,As directed,Oral,statin
+2026-04-10 12:38:07,Suresh Iyer,44,Ramesh Gupta,Aspirin,75 mg,As directed,As directed,Oral,analgesic
+2026-04-10 12:38:07,Suresh Iyer,44,Ramesh Gupta,Vitamin D3,60000 iu,As directed,As directed,Oral,vitamin
+2026-04-10 12:31:57,Rajesh Kumar,45,Lakshmi Iyer,Sertraline,50 mg,At bedtime,As directed,Oral,ssri
+2026-04-10 12:31:57,Rajesh Kumar,45,Lakshmi Iyer,Clonazepam,0.5 mg,At bedtime,As directed,Oral,benzodiazepine
+2026-04-10 12:31:57,Rajesh Kumar,45,Lakshmi Iyer,Pregabalin,75 mg,At night,2 weeks,Oral,anticonvulsant
+2026-04-09 09:39:03,Hashmathpet Road,,,Sizodon_B,As prescribed,As directed,As directed,Oral,antipsychotic
+2026-04-09 09:39:03,Hashmathpet Road,,,Lorazepam,As prescribed,As directed,As directed,Oral,benzodiazepine
+2026-04-09 09:39:03,Hashmathpet Road,,,Sertraline,As prescribed,As directed,As directed,Oral,ssri
+2026-04-06 15:53:02,srinivas,41,Nagendra,Sizodon_B,As prescribed,As directed,As directed,Oral,antipsychotic
+2026-04-06 15:53:02,srinivas,41,Nagendra,Lorazepam,As prescribed,As directed,As directed,Oral,benzodiazepine
+2026-04-06 15:53:02,srinivas,41,Nagendra,Sertraline,As prescribed,As directed,As directed,Oral,ssri
+2026-04-06 15:51:25,srinivas,41,Nagendra,Sizodon_B,As prescribed,As directed,As directed,Oral,antipsychotic
+2026-04-06 15:51:25,srinivas,41,Nagendra,Lorazepam,As prescribed,As directed,As directed,Oral,benzodiazepine
+2026-04-06 15:51:25,srinivas,41,Nagendra,Sertraline,As prescribed,As directed,As directed,Oral,ssri
+2026-04-06 15:48:37,Hashmathpet Road,,,Sizodon_B,As prescribed,As directed,As directed,Oral,antipsychotic
+2026-04-06 15:48:37,Hashmathpet Road,,,Lorazepam,As prescribed,As directed,As directed,Oral,benzodiazepine
+2026-04-06 15:48:37,Hashmathpet Road,,,Sertraline,As prescribed,As directed,As directed,Oral,ssri
+2026-04-06 15:46:49,Hashmathpet Road,,,Sizodon_B,As prescribed,As directed,As directed,Oral,antipsychotic
+2026-04-06 15:46:49,Hashmathpet Road,,,Lorazepam,As prescribed,As directed,As directed,Oral,benzodiazepine
+2026-04-06 15:46:49,Hashmathpet Road,,,Sertraline,As prescribed,As directed,As directed,Oral,ssri
+2026-04-06 15:46:00,srinivas,41,nagendra,Sizodon_B,As prescribed,As directed,As directed,Oral,antipsychotic
+2026-04-06 15:46:00,srinivas,41,nagendra,Lorazepam,As prescribed,As directed,As directed,Oral,benzodiazepine
+2026-04-06 15:46:00,srinivas,41,nagendra,Sertraline,As prescribed,As directed,As directed,Oral,ssri
+2026-04-02 10:02:30,Hashmathpet Road,,,Sizodon_B,As prescribed,As directed,As directed,Oral,antipsychotic
+2026-04-02 10:02:30,Hashmathpet Road,,,Lorazepam,As prescribed,As directed,As directed,Oral,benzodiazepine
+2026-04-02 10:02:30,Hashmathpet Road,,,Sertraline,As prescribed,As directed,As directed,Oral,ssri
+2026-04-02 07:34:41,Srinivas,41,Nagendra,Amoxicillin Clavulanate,As prescribed,As directed,As directed,Oral,antibiotic
+2026-04-02 07:34:41,Srinivas,41,Nagendra,Diclofenac Serratiopeptidase,As prescribed,As directed,5 days,Oral,nsaid
+2026-04-02 07:34:41,Srinivas,41,Nagendra,Chlorhexidine Gluconate,As prescribed,Morning and Night,1 week,Topical,antiseptic
+2026-04-02 07:34:41,Srinivas,41,Nagendra,Pantoprazole Domperidone,As prescribed,As directed,As directed,Oral,ppi
+2026-04-02 07:33:24,Srinivas,41,Nagendra,Sizodon_B,As prescribed,As directed,As directed,Oral,antipsychotic
+2026-04-02 07:33:24,Srinivas,41,Nagendra,Lorazepam,As prescribed,As directed,As directed,Oral,benzodiazepine
+2026-04-02 07:33:24,Srinivas,41,Nagendra,Sertraline,As prescribed,As directed,As directed,Oral,ssri
+2026-04-02 07:32:01,Srinivas,41,Nagendra,Sizodon_B,As prescribed,As directed,As directed,Oral,antipsychotic
+2026-04-02 07:32:01,Srinivas,41,Nagendra,Lorazepam,As prescribed,As directed,As directed,Oral,benzodiazepine
+2026-04-02 07:32:01,Srinivas,41,Nagendra,Sertraline,As prescribed,As directed,As directed,Oral,ssri
+2026-04-02 06:02:32,DEPARTMENT OF MEDICINE,,,Sizodon_B,As prescribed,As directed,As directed,Oral,antipsychotic
+2026-04-02 06:02:32,DEPARTMENT OF MEDICINE,,,Lorazepam,As prescribed,As directed,As directed,Oral,benzodiazepine
+2026-04-02 06:02:32,DEPARTMENT OF MEDICINE,,,Sertraline,As prescribed,As directed,As directed,Oral,ssri
+2026-04-02 05:54:04,Hashmathpet Road,,Dr. Sachin Patil,Sizodon_B,As prescribed,As directed,As directed,Oral,antipsychotic
+2026-04-02 05:54:04,Hashmathpet Road,,Dr. Sachin Patil,Lorazepam,As prescribed,As directed,As directed,Oral,benzodiazepine
+2026-04-02 05:54:04,Hashmathpet Road,,Dr. Sachin Patil,Sertraline,As prescribed,As directed,As directed,Oral,ssri
+2026-04-02 05:51:23,Hashmathpet Road,,Dr. Sachin Patil,Amoxicillin Clavulanate,As prescribed,As directed,As directed,Oral,antibiotic
+2026-04-02 05:51:23,Hashmathpet Road,,Dr. Sachin Patil,Diclofenac Serratiopeptidase,As prescribed,As directed,5 days,Oral,nsaid
+2026-04-02 05:51:23,Hashmathpet Road,,Dr. Sachin Patil,Chlorhexidine Gluconate,As prescribed,Morning and Night,1 week,Topical,antiseptic
+2026-04-02 05:51:23,Hashmathpet Road,,Dr. Sachin Patil,Pantoprazole Domperidone,As prescribed,As directed,As directed,Oral,ppi
+2026-04-02 05:47:28,Hashmathpet Road,,,Azithromycin,5 ml,As directed,As directed,Oral,antibiotic
+2026-04-02 05:45:49,Hashmathpet Road,,,Sizodon_B,As prescribed,As directed,As directed,Oral,antipsychotic
+2026-04-02 05:45:49,Hashmathpet Road,,,Lorazepam,As prescribed,As directed,As directed,Oral,benzodiazepine
+2026-04-02 05:45:49,Hashmathpet Road,,,Sertraline,As prescribed,As directed,As directed,Oral,ssri
+2026-04-02 05:01:37,Srinivas,41,nagendra,Azithromycin,5 ml,As directed,As directed,Oral,antibiotic
+2026-04-02 05:01:10,Srinivas,41,nagendra,Azithromycin,5 ml,As directed,As directed,Oral,antibiotic
+2026-04-02 05:00:53,Srinivas,41,nagendra,Amoxicillin Clavulanate,As prescribed,As directed,As directed,Oral,antibiotic
+2026-04-02 05:00:53,Srinivas,41,nagendra,Diclofenac Serratiopeptidase,As prescribed,As directed,5 days,Oral,nsaid
+2026-04-02 05:00:53,Srinivas,41,nagendra,Chlorhexidine Gluconate,As prescribed,Morning and Night,1 week,Topical,antiseptic
+2026-04-02 05:00:53,Srinivas,41,nagendra,Pantoprazole Domperidone,As prescribed,As directed,As directed,Oral,ppi
+2026-04-02 04:53:10,Srinivas,41,nagendra,Amoxicillin Clavulanate,As prescribed,As directed,As directed,Oral,antibiotic
+2026-04-02 04:53:10,Srinivas,41,nagendra,Diclofenac Serratiopeptidase,As prescribed,As directed,5 days,Oral,nsaid
+2026-04-02 04:53:10,Srinivas,41,nagendra,Chlorhexidine Gluconate,As prescribed,Morning and Night,1 week,Topical,antiseptic
+2026-04-02 04:53:10,Srinivas,41,nagendra,Pantoprazole Domperidone,As prescribed,As directed,As directed,Oral,ppi
+2026-04-02 04:51:13,Srinivas,41,nagendra,Sizodon_B,As prescribed,As directed,As directed,Oral,antipsychotic
+2026-04-02 04:51:13,Srinivas,41,nagendra,Lorazepam,As prescribed,As directed,As directed,Oral,benzodiazepine
+2026-04-02 04:51:13,Srinivas,41,nagendra,Sertraline,As prescribed,As directed,As directed,Oral,ssri
+2026-04-02 04:49:14,Srinivas,41,nagendra,Sizodon_B,As prescribed,As directed,As directed,Oral,antipsychotic
+2026-04-02 04:49:14,Srinivas,41,nagendra,Lorazepam,As prescribed,As directed,As directed,Oral,benzodiazepine
+2026-04-02 04:49:14,Srinivas,41,nagendra,Sertraline,As prescribed,As directed,As directed,Oral,ssri

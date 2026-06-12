@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Prescription Scanner{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">Welcome back, {{ user.full_name }}</p>
+        </div>
+        <a href="{{ url_for('scan') }}" class="btn btn-primary-app">
+            <i class="bi bi-upc-scan me-2"></i>New Scan
+        </a>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card stat-card-blue">
+                <div class="stat-icon"><i class="bi bi-files-alt"></i></div>
+                <div class="stat-body">
+                    <div class="stat-value">{{ stats.total_scans }}</div>
+                    <div class="stat-label">Total Scans</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card stat-card-green">
+                <div class="stat-icon"><i class="bi bi-graph-up"></i></div>
+                <div class="stat-body">
+                    <div class="stat-value">{{ stats.avg_accuracy }}%</div>
+                    <div class="stat-label">Average Accuracy</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card stat-card-orange">
+                <div class="stat-icon"><i class="bi bi-calendar-check"></i></div>
+                <div class="stat-body">
+                    <div class="stat-value">{{ stats.scans_today }}</div>
+                    <div class="stat-label">Scans Today</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="stat-card stat-card-purple">
+                <div class="stat-icon"><i class="bi bi-database-fill-check"></i></div>
+                <div class="stat-body">
+                    <div class="stat-value">{{ training_stats.total_samples }}</div>
+                    <div class="stat-label">Training Samples</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Scan CTA -->
+    <div class="scan-cta-card mb-4">
+        <div class="scan-cta-content">
+            <div class="scan-cta-icon"><i class="bi bi-upc-scan"></i></div>
+            <div>
+                <h4>Scan a Prescription</h4>
+                <p>Upload handwritten prescription for AI-powered text recognition and medication extraction.</p>
+            </div>
+        </div>
+        <a href="{{ url_for('scan') }}" class="btn btn-primary-app">
+            <i class="bi bi-arrow-right-circle me-2"></i>Start Scanning
+        </a>
+    </div>
+
+    <!-- Recent Scans -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h5><i class="bi bi-clock-history me-2"></i>Recent Prescriptions</h5>
+            <a href="{{ url_for('history') }}" class="btn btn-sm btn-link-app">View All</a>
+        </div>
+        <div class="section-card-body">
+            {% if prescriptions %}
+            <div class="table-responsive">
+                <table class="table table-app">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>File</th>
+                            <th>Patient</th>
+                            <th>Medications</th>
+                            <th>Accuracy</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rx in prescriptions %}
+                        <tr>
+                            <td><span class="text-muted small">{{ rx.scan_date[:16] if rx.scan_date else '-' }}</span></td>
+                            <td><span class="filename-badge">{{ rx.original_filename[:20] if rx.original_filename else 'Unknown' }}</span></td>
+                            <td>{{ rx.patient_name or '-' }}</td>
+                            <td>
+                                <span class="badge bg-primary-soft">{{ rx.medications|length }} found</span>
+                            </td>
+                            <td>
+                                <span class="accuracy-badge {% if rx.overall_accuracy and rx.overall_accuracy > 70 %}accuracy-good{% elif rx.overall_accuracy and rx.overall_accuracy > 40 %}accuracy-avg{% else %}accuracy-low{% endif %}">
+                                    {{ rx.overall_accuracy|round(1) if rx.overall_accuracy else '0' }}%
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('view_prescription', rx_id=rx.id) }}" class="btn btn-xs btn-view">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                                {% if rx.pdf_path %}
+                                <a href="{{ url_for('download_pdf', rx_id=rx.id) }}" class="btn btn-xs btn-pdf">
+                                    <i class="bi bi-file-pdf"></i> PDF
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <h5>No prescriptions scanned yet</h5>
+                <p>Upload your first prescription to get started.</p>
+                <a href="{{ url_for('scan') }}" class="btn btn-primary-app mt-2">Scan Now</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

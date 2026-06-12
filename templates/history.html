@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}Scan History - Prescription Scanner{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Scan History</h1>
+            <p class="page-subtitle">All your scanned prescriptions</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('export_csv') }}" class="btn btn-outline-app">
+                <i class="bi bi-download me-2"></i>Export CSV
+            </a>
+            <a href="{{ url_for('scan') }}" class="btn btn-primary-app">
+                <i class="bi bi-plus-circle me-2"></i>New Scan
+            </a>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <div class="section-card-body">
+            {% if prescriptions %}
+            <div class="table-responsive">
+                <table class="table table-app">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Date & Time</th>
+                            <th>File Name</th>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Medications</th>
+                            <th>Accuracy</th>
+                            <th>OCR Conf.</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rx in prescriptions %}
+                        <tr>
+                            <td class="text-muted small">{{ rx.id }}</td>
+                            <td><span class="text-muted small">{{ rx.scan_date[:16] if rx.scan_date else '-' }}</span></td>
+                            <td><span class="filename-badge">{{ rx.original_filename[:22] if rx.original_filename else 'Unknown' }}</span></td>
+                            <td>{{ rx.patient_name or '-' }}</td>
+                            <td>{{ rx.doctor_name or '-' }}</td>
+                            <td><span class="badge bg-primary-soft">{{ rx.medications|length }}</span></td>
+                            <td>
+                                <span class="accuracy-badge {% if rx.overall_accuracy and rx.overall_accuracy > 70 %}accuracy-good{% elif rx.overall_accuracy and rx.overall_accuracy > 40 %}accuracy-avg{% else %}accuracy-low{% endif %}">
+                                    {{ "%.1f"|format(rx.overall_accuracy) if rx.overall_accuracy else '0' }}%
+                                </span>
+                            </td>
+                            <td>{{ "%.1f"|format(rx.ocr_confidence) if rx.ocr_confidence else '0' }}%</td>
+                            <td class="d-flex gap-1">
+                                <a href="{{ url_for('view_prescription', rx_id=rx.id) }}" class="btn btn-xs btn-view">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                {% if rx.pdf_path %}
+                                <a href="{{ url_for('download_pdf', rx_id=rx.id) }}" class="btn btn-xs btn-pdf">
+                                    <i class="bi bi-file-pdf"></i>
+                                </a>
+                                {% endif %}
+                                <a href="{{ url_for('get_prescription_json', rx_id=rx.id) }}" target="_blank" class="btn btn-xs btn-outline-secondary">
+                                    <i class="bi bi-braces"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <h5>No scan history yet</h5>
+                <p>Start scanning prescriptions to build your history.</p>
+                <a href="{{ url_for('scan') }}" class="btn btn-primary-app mt-2">Scan Now</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
