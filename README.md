@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Prescription Scanner
 ## AI-Powered Medical Handwritten Prescription Recognition System
 
@@ -193,6 +193,3 @@ SQLite databases are auto-created in the `instance/` directory on first run.
 - Always consult a licensed pharmacist or physician before acting on OCR results.
 - OCR accuracy depends heavily on prescription image quality.
 - The system is optimized for Indian market medications and brand names.
-=======
-# AI-Powered-Recognition-of-Medical-Prescription
->>>>>>> 6c709d71c1ea17a536ce10bf81aab2d5e12395c1
