@@ -4,45 +4,7 @@
 
 ---
 
-## Project Structure
 
-```
-prescription_scanner/
-├── app.py                          # Main Flask application
-├── models.py                       # SQLite database models
-├── run.py                          # Startup script
-├── requirements.txt                # Python dependencies
-├── instance/
-│   ├── prescriptions.db            # Main database (auto-created)
-│   └── training.db                 # Training data database (auto-created)
-├── static/
-│   ├── css/style.css               # Main stylesheet
-│   ├── js/main.js                  # Frontend JavaScript
-│   ├── uploads/                    # Uploaded prescription images
-│   ├── preprocessed/               # Preprocessed image variants
-│   └── exports/                    # PDF and CSV exports
-├── templates/
-│   ├── base.html                   # Base layout with navbar
-│   ├── login.html                  # Login page
-│   ├── register.html               # Registration page
-│   ├── forgot_password.html        # Forgot password
-│   ├── reset_password.html         # Password reset
-│   ├── dashboard.html              # User dashboard
-│   ├── scan.html                   # Prescription scanner
-│   ├── history.html                # Scan history
-│   └── view_prescription.html     # Prescription detail view
-├── utils/
-│   ├── __init__.py
-│   ├── image_preprocessor.py       # OpenCV image enhancement pipeline
-│   ├── ocr_engine.py               # PaddleOCR + NLP processing
-│   ├── medical_dictionary.py       # 200+ medication database
-│   ├── training_module.py          # Perceptual hash training system
-│   └── export_utils.py             # PDF and CSV export
-└── training_data/
-    └── images/                     # Place training images here
-```
-
----
 
 ## Setup Instructions
 
