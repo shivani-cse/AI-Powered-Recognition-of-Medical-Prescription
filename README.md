@@ -30,7 +30,7 @@ The system combines:
 
 ---
 
-# 🖼️ Project Screenshots
+
 
 
 ## Upload Prescription
