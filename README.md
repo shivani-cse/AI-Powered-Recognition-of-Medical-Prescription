@@ -1,47 +1,117 @@
-# Prescription Scanner  
-## AI-Powered Medical Handwritten Prescription Recognition System
+# 🩺 AI-Powered Medical Prescription OCR System
+
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![Flask](https://img.shields.io/badge/Framework-Flask-black)
+![PaddleOCR](https://img.shields.io/badge/OCR-PaddleOCR-green)
+![OpenCV](https://img.shields.io/badge/Image%20Processing-OpenCV-red)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
+
+# Prescription Scanner
+
+AI-powered system that recognizes and digitizes handwritten medical prescriptions using **OCR, Computer Vision, Machine Learning, and Natural Language Processing (NLP)**.
+
+This project helps convert unclear handwritten prescriptions into structured digital information such as medicine names, dosage, frequency, duration, and medical instructions.
+
+The main goal is to reduce prescription reading errors, improve processing speed, and support healthcare professionals with AI-assisted prescription analysis.
 
 ---
 
-## 📌 Overview
+# 📋 Project Overview
 
-Prescription Scanner is an AI-powered web application designed to recognize and digitize handwritten medical prescriptions. The system uses Artificial Intelligence, Optical Character Recognition (OCR), and Natural Language Processing (NLP) techniques to extract important prescription information such as medicine names, dosage details, frequency, and instructions.
+The system combines:
 
-The main aim of this project is to reduce errors caused by unclear handwriting, save time in prescription processing, and convert handwritten medical data into a structured digital format.
+- Advanced image preprocessing
+- Handwriting optimized OCR recognition
+- Medical dictionary matching
+- NLP-based medical information extraction
+- Prescription report generation
+- Data export functionality
 
 ---
 
-# 🚀 Features
+# 🖼️ Project Screenshots
 
-## Image Preprocessing Pipeline
 
-- Adaptive thresholding (OTSU + Gaussian)
+## Upload Prescription
+
+![Upload](screenshots/upload.png)
+
+
+## Extracted Prescription Result
+
+![Result](screenshots/result.png)
+
+
+## Generated Report
+
+![Report](screenshots/report.png)
+
+
+---
+
+# 🔍 Core Features
+
+
+## 🖼️ Advanced Image Preprocessing
+
+- Adaptive thresholding
+- OTSU + Gaussian thresholding
 - CLAHE contrast enhancement
 - Noise reduction
+- Image sharpening
 - Deskew and rotation correction
 - Morphological character enhancement
-- Image sharpening
-- Multiple image variants for better OCR accuracy
+- Multiple image preprocessing techniques for OCR improvement
 
-## OCR Engine
 
-- PaddleOCR with SVTR_LCNet algorithm
+---
+
+## 🔎 OCR Recognition System
+
+- PaddleOCR integration
+- SVTR_LCNet OCR algorithm
 - Handwritten text extraction
-- Multi-pass OCR processing
-- Confidence-based recognition
-- Text merging and duplicate removal
+- Multiple OCR processing passes
+- Confidence score evaluation
+- Text cleaning and duplicate removal
 
-## Medical Dictionary
 
-- Supports 200+ medications
+---
+
+## 💊 Medical Dictionary Integration
+
+- Supports 200+ medicines
 - Tablet and capsule recognition
 - Injection and syrup recognition
 - Indian brand name support
 - Fuzzy matching using Levenshtein distance
-- Medicine frequency detection (OD, BD, TDS, QID, SOS)
-- Route detection (PO, IM, IV, SC, SL)
+- Medicine frequency detection
 
-## NLP Processing
+Supported frequency:
+
+```
+OD
+BD
+TDS
+QID
+SOS
+```
+
+Route detection:
+
+```
+PO
+IM
+IV
+SC
+SL
+```
+
+
+---
+
+## 🧠 NLP Processing
 
 - Medicine name extraction
 - Dosage extraction
@@ -50,112 +120,101 @@ The main aim of this project is to reduce errors caused by unclear handwriting, 
 - Medical instruction analysis
 - Patient information extraction
 
-## Accuracy Metrics
 
-- Character accuracy
-- Word accuracy
-- Medicine recognition accuracy
-- Overall OCR confidence score
+---
 
-## Training System
+## 🤖 Training System
 
-- Perceptual hash (pHash) image similarity
+- Perceptual hash (pHash) similarity
 - Hamming distance comparison
-- Progressive learning database
-- Verified sample tracking
+- Prescription sample tracking
+- Continuous improvement support
 
-## Export Options
+
+---
+
+## 📤 Export Features
 
 - PDF prescription report generation
 - CSV export
-- JSON API support
+- JSON structured data
 
-## Authentication
-
-- User registration and login
-- Role-based access
-- Secure password hashing
-- Password reset functionality
-- Session management
 
 ---
 
 # 🛠️ Technologies Used
 
-### Backend
-- Python
-- Flask
 
-### AI / ML
+## AI / Machine Learning
+
 - PaddleOCR
-- SVTR_LCNet OCR Algorithm
+- SVTR_LCNet
+- PyTorch
 - SpaCy NLP
 - Fuzzy Matching Algorithm
 
-### Image Processing
+
+## Computer Vision
+
 - OpenCV
 
-### Database
+
+## Backend
+
+- Python
+- Flask
+
+
+## Database
+
 - SQLite
 
-### Frontend
+
+## Frontend
+
 - HTML
 - CSS
 - JavaScript
+- Bootstrap
+
 
 ---
 
-# ⚙️ Working Process
+# 🚀 Getting Started
 
-1. User uploads handwritten prescription image
-2. Image preprocessing improves image quality
-3. OCR extracts handwritten text
-4. NLP processes extracted information
-5. Medicine names and dosage are identified
-6. Results are displayed in structured format
-7. Prescription report can be generated
 
----
+## Prerequisites
 
-# 📂 Project Modules
+- Python 3.8+
+- pip package manager
 
-## Image Preprocessing
-
-Improves prescription image quality using resizing, noise removal, thresholding, and enhancement techniques.
-
-## OCR Processing
-
-Uses PaddleOCR to convert handwritten prescription images into machine-readable text.
-
-## Text Processing
-
-Uses NLP techniques to identify medicine names, dosage details, and medical instructions.
-
-## Medicine Recognition
-
-Uses fuzzy matching algorithms to correct spelling variations and improve medicine identification accuracy.
-
-## Result Display
-
-Displays extracted prescription information through the Flask web interface.
 
 ---
 
-# 📦 Installation
+# Installation
 
-## Clone Repository
+
+Clone repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/shivani-cse/AI-Powered-Recognition-of-Medical-Prescription.git
 ```
 
-## Create Virtual Environment
+Go inside project:
+
+```bash
+cd AI-Powered-Recognition-of-Medical-Prescription
+```
+
+
+Create virtual environment:
 
 ```bash
 python -m venv venv
 ```
 
-## Activate Virtual Environment
+
+Activate environment:
 
 ### Windows
 
@@ -163,29 +222,34 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
+
 ### Linux / Mac
 
 ```bash
 source venv/bin/activate
 ```
 
-## Install Dependencies
+
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Install SpaCy Model
+
+Install SpaCy model:
 
 ```bash
 python -m spacy download en_core_web_sm
 ```
 
-## Run Application
+
+Run application:
 
 ```bash
 python run.py
 ```
+
 
 Open browser:
 
@@ -193,102 +257,80 @@ Open browser:
 http://127.0.0.1:5000
 ```
 
----
-
-# 📁 Adding Training Data
-
-Place prescription images inside:
-
-```
-training_data/images/
-```
-
-The system stores scanned prescriptions as training samples to improve future recognition.
 
 ---
 
-# 🔐 Environment Variables
+# 💻 Usage
 
-| Variable | Description |
-|----------|-------------|
-| SECRET_KEY | Flask session security key |
 
-Example:
+1. Upload handwritten prescription image
+2. Image preprocessing improves image quality
+3. OCR extracts handwritten text
+4. NLP processes medical information
+5. Medicine details are identified
+6. Digital prescription report is generated
 
-```bash
-export SECRET_KEY="your-secret-key"
-```
-
----
-
-# 🗄️ Database
-
-SQLite database is automatically created.
-
-Stored data:
-
-- User information
-- Prescription records
-- Extracted text
-- Training samples
-
-Database files:
-
-```
-prescriptions.db
-training.db
-```
 
 ---
 
-# 🖼️ Supported Image Formats
 
-Supported:
 
-- PNG
-- JPG
-- JPEG
-- GIF
-- BMP
-- TIFF
-- WEBP
-
-Best results:
-
-- Clear image
-- Good lighting
-- High resolution
-- Proper contrast
 
 ---
 
-# ✅ Advantages
+# 📊 Performance Metrics
 
-- Reduces errors caused by unclear handwriting
-- Saves time in prescription processing
-- Improves accuracy using AI and OCR
-- Converts handwritten prescriptions into digital format
-- Supports easy storage and retrieval
-- Helps healthcare professionals access information quickly
+
+The system evaluates:
+
+- Character accuracy
+- Word accuracy
+- Medicine recognition accuracy
+- OCR confidence score
+
 
 ---
 
 # 🔮 Future Enhancements
 
-- Mobile application development
+- Mobile application
 - Cloud deployment
 - Multi-language support
-- Integration with hospital management systems
+- Hospital management integration
 - Improved deep learning models
 - Electronic Health Record integration
 
----
-
-# ⚠️ Notes
-
-- OCR accuracy depends on image quality.
-- Results should be verified by healthcare professionals.
-- This system is developed as an assistive healthcare tool.
 
 ---
 
+# ⚠️ Disclaimer
+
+This project is developed as an assistive healthcare tool.
+
+OCR accuracy depends on handwriting quality and image conditions. Medical information should always be verified by healthcare professionals.
+
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome.
+
+Feel free to submit issues or pull requests.
+
+
+---
+
+# 🙏 Acknowledgements
+
+- PaddleOCR for OCR technology
+- OpenCV for image processing
+- Flask for backend framework
+- SpaCy for NLP processing
+
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
