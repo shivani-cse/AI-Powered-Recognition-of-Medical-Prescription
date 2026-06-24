@@ -30,26 +30,6 @@ The system combines:
 
 ---
 
-
-
-
-## Upload Prescription
-
-![Upload](screenshots/upload.png)
-
-
-## Extracted Prescription Result
-
-![Result](screenshots/result.png)
-
-
-## Generated Report
-
-![Report](screenshots/report.png)
-
-
----
-
 # 🔍 Core Features
 
 
