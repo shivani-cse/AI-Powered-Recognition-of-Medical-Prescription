@@ -382,7 +382,37 @@ def get_prescription_json(rx_id):
     if not prescription:
         return jsonify({'error': 'Not found'}), 404
     return jsonify(prescription)
+#
+@app.route("/")
+def home():
+    return render_template("index.html")
 
+
+# Prescription upload route
+@app.route("/upload", methods=["POST"])
+def upload_prescription():
+
+    if "file" not in request.files:
+        return jsonify({
+            "error": "No file uploaded"
+        })
+
+
+    file = request.files["file"]
+
+    if file.filename == "":
+        return jsonify({
+            "error": "No selected file"
+        })
+
+
+    file_path = os.path.join(
+        app.config["UPLOAD_FOLDER"],
+        file.filename
+    )
+
+    file.save(file_path)
+#
 
 if __name__ == '__main__':
     init_db()
